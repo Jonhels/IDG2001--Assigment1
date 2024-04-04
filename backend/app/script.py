@@ -57,7 +57,10 @@ def upload_file():
             with open(md_path, 'r') as file:
                 md_content = file.read()
                 pdf_path = os.path.join(PDF_FOLDER, md_file.replace(".md", ".pdf"))
-                process = subprocess.run(['pandoc', '-o', pdf_path, '-f', 'markdown', '-t', 'pdf'], input=md_content, text=True)
+                process = subprocess.run(['pandoc', '-o', pdf_path, '-f', 'markdown', '-t', 'pdf', md_path], capture_output=True, text=True)
+                print("STDOUT:", process.stdout)
+                print("STDERR:", process.stderr)
+
                 if process.returncode != 0:
                     return f"Error converting {md_file} to PDF", 500
 

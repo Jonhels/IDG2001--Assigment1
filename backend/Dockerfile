@@ -11,7 +11,9 @@ COPY requirements.txt /backend/requirements.txt
 # Also, install pandoc and pdflatex (part of texlive) which are required by your application
 RUN pip install --no-cache-dir -r /backend/requirements.txt && \
     apt-get update && \
-    apt-get install -y pandoc texlive
+    apt-get install -y pandoc texlive && \
+    apt-get clean && \
+    rm -rf /var/lib/apt/lists/*
 
 # Now, copy the rest of your app
 COPY ./app ./
@@ -23,4 +25,4 @@ EXPOSE 5000
 ENV FLASK_APP=script.py
 
 # Run Gunicorn when the container launches
-CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT script:app"]
+CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT --timeout 120 script:app"]
