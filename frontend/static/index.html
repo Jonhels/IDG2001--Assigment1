@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>File Upload and Compression</title>
+    </head>
+    <body>
+        <input type="file" id="fileInput" multiple />
+        <button onclick="uploadFiles()">Upload</button>
+        <ul id="fileList"></ul>
+
+        <script>
+            async function uploadFiles() {
+                const input = document.getElementById("fileInput");
+                const data = new FormData();
+
+                for (const file of input.files) {
+                    data.append("files", file);
+                }
+
+                await fetch("/uploadfile/", {
+                    method: "POST",
+                    body: data,
+                });
+
+                listFiles();
+            }
+
+            async function listFiles() {
+                const response = await fetch("/files/");
+                const data = await response.json();
+                const list = document.getElementById("fileList");
+                list.innerHTML = "";
+
+                data.files.forEach((file) => {
+                    const item = document.createElement("li");
+                    item.textContent = file;
+                    list.appendChild(item);
+                });
+            }
+
+            // Initial listing of files
+            listFiles();
+        </script>
+    </body>
+</html>

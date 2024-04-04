@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>File Upload and Download</title>
+    </head>
+    <body>
+        <h2>Upload File</h2>
+        <form
+            action="http://localhost:8089/upload"
+            method="post"
+            enctype="multipart/form-data"
+        >
+            <input type="file" name="file" id="file" />
+            <input type="submit" value="Upload File" />
+        </form>
+
+        <h2>Download File</h2>
+        <button
+            onclick="window.location.href='http://localhost:8089//download';"
+        >
+            Download File
+        </button>
+    </body>
+</html>
