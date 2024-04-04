@@ -5,6 +5,7 @@ from typing import List
 import os
 import shutil
 import tarfile
+import subprocess
 
 
 app = FastAPI()
@@ -34,6 +35,8 @@ async def create_upload_files(files: List[UploadFile] = File(...)):
                 shutil.copyfileobj(file.file, buffer)
 
     compress_csv_files(UPLOAD_DIR, compressed_file_path)
+
+    subprocess.run(["python3", "upload.py"], check=True)
 
     return JSONResponse(content={"message": "CSV files uploaded and compressed successfully"}, status_code=200)
 
