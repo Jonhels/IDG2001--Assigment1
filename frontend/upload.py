@@ -8,8 +8,8 @@ file_name = 'compressed_files.tar.gz'
 file_path = os.path.join(folder_path, file_name)
 
 # URL endpoints
-upload_url = 'http://localhost:8089/upload'
-download_url = 'http://localhost:8089/download'
+upload_url = 'https://pythonassignment1-production.up.railway.app/upload'
+download_url = 'https://pythonassignment1-production.up.railway.app/download'
 
 # Check if the file exists
 if os.path.exists(file_path):

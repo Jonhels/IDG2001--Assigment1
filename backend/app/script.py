@@ -74,32 +74,12 @@ def upload_file():
 
 @app.route('/download')
 def download_file():
+    pdf_tar_path = 'PDF.tar.gz'
+    if not os.path.exists(pdf_tar_path):
+        return 'PDF archive not found. Please try uploading and processing your files again.', 404
+
     # Attempt to send the file to the client
-    response = send_file('PDF.tar.gz', as_attachment=True)
-
-    # Cleanup code: Delete the processed files
-    try:
-        # Delete generated PDF files
-        for pdf_file in os.listdir(PDF_FOLDER):
-            os.remove(os.path.join(PDF_FOLDER, pdf_file))
-
-        # Delete Markdown files (optional, if you want to clean these up too)
-        for md_file in os.listdir(MD_FOLDER):
-            os.remove(os.path.join(MD_FOLDER, md_file))
-
-        # Delete uploaded and extracted files (optional, careful with this)
-        for uploaded_file in os.listdir(UPLOAD_FOLDER):
-            file_path = os.path.join(UPLOAD_FOLDER, uploaded_file)
-            if os.path.isfile(file_path):  # Check if it's a file and not a directory
-                os.remove(file_path)
-
-        # Finally, delete the compressed PDF file
-        os.remove('PDF.tar.gz')
-
-    except Exception as e:
-        app.logger.error(f"Error during cleanup: {e}")
-        # You might want to return a different response in case of cleanup failure
-        # or just log the error, as done here.
+    response = send_file(pdf_tar_path, as_attachment=True)
 
     return response
 
