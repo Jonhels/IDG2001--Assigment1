@@ -7,7 +7,7 @@ def test_server_connection():
 
 def test_upload_files():
     files = {'file': open('tests/test_files/test.csv', 'rb')}
-    response = requests.post("https://oblig1-cloud-frontend-production.up.railway.app/uploadfile/", files=files)
+    response = requests.post("https://oblig1-cloud-frontend-production.up.railway.app/upload", files=files)
     assert response.status_code == 200, "Failed to upload file(s)"
     
 def test_list_files():
