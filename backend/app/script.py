@@ -1,8 +1,11 @@
 import csv
 import os
 import tarfile
+import shutil
+import time
 import subprocess
 from flask import Flask, request, send_file
+from threading import Timer
 from werkzeug.utils import secure_filename
 
 app = Flask(__name__)
@@ -17,6 +20,16 @@ os.makedirs(PDF_FOLDER, exist_ok=True)
 
 # Path for the Markdown template, assumed to be in the root directory
 MD_TEMPLATE_PATH = 'template.md'
+
+def delayed_cleanup():
+    try:
+        os.remove('PDF.tar.gz')
+        shutil.rmtree(PDF_FOLDER)
+        shutil.rmtree(UPLOAD_FOLDER)
+        os.makedirs(PDF_FOLDER, exist_ok=True)
+        os.makedirs(UPLOAD_FOLDER, exist_ok=True)
+    except Exception as e:
+        print(f"Cleanup error: {e}")
 
 @app.route('/upload', methods=['POST'])
 def upload_file():
@@ -83,6 +96,9 @@ def download_file():
 
     # Attempt to send the file to the client
     response = send_file(pdf_tar_path, as_attachment=True)
+
+    # Schedule cleanup to occur after a delay, ensuring the file has been sent
+    Timer(10.0, delayed_cleanup).start()  # Adjust delay as needed
 
     return response
 
