@@ -17,7 +17,7 @@ To install the project, you need to clone the repository and install the depende
 
 ```bash
 git clone
-cd pythonassignment1
+cd IDG2001--ASSIGNMENT1
 pip install -r requirements.txt
 ```
 
