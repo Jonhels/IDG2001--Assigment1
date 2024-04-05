@@ -39,6 +39,24 @@
                 const list = document.getElementById("fileList");
                 list.innerHTML = "";
 
+                if (data.files.length === 0) {
+                    const item = document.createElement("li");
+                    item.textContent = "Files are processing";
+                    list.appendChild(item);
+                } else {
+                    data.files.forEach((file) => {
+                        const item = document.createElement("li");
+                        item.textContent = file;
+                        list.appendChild(item);
+                    });
+                }
+            }
+            async function listDownloadFiles() {
+                const response = await fetch("/downloadList/");
+                const data = await response.json();
+                const list = document.getElementById("downloadedList");
+                list.innerHTML = "";
+
                 data.files.forEach((file) => {
                     const item = document.createElement("li");
                     item.textContent = file;
@@ -72,15 +90,10 @@
                 }
             }
 
-            function addToDownloadedList(fileName) {
-                const list = document.getElementById("downloadedList");
-                const item = document.createElement("li");
-                item.textContent = fileName;
-                list.appendChild(item);
-            }
-
             // Initial listing of files
             listFiles();
+            setInterval(listDownloadFiles, 5000);
+            listDownloadFiles();
         </script>
     </body>
 </html>

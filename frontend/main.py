@@ -13,6 +13,7 @@ app = FastAPI()
 
 UPLOAD_DIR = "uploadedFiles"
 COMPRESSED_DIR = "compressedFiles"
+DOWNLOAD_DIR = "downloadedFiles"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 os.makedirs(COMPRESSED_DIR, exist_ok=True)
 compressed_file_path = os.path.join(COMPRESSED_DIR, 'compressed_files.tar.gz')
@@ -26,6 +27,18 @@ def compress_csv_files(folder_path, compressed_file_path):
 
 @app.post("/uploadfile/")
 async def create_upload_files(files: List[UploadFile] = File(...)):
+    for directory in [UPLOAD_DIR, COMPRESSED_DIR, DOWNLOAD_DIR]:
+        for file in os.listdir(directory):
+            file_path = os.path.join(directory, file)
+            try:
+                if os.path.isfile(file_path) or os.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                return JSONResponse(content={"message": f"Failed to delete {file_path}: {e}"}, status_code=500)
+
+# process new files
     for file in files:
         # Ensure this checks for '.csv' files
         if file.filename and file.filename.endswith('.csv'):
@@ -43,6 +56,11 @@ async def create_upload_files(files: List[UploadFile] = File(...)):
 @app.get("/files/")
 async def list_files():
     files = [f for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))]
+    return {"files": files}
+
+@app.get("/downloadList/")
+async def download_files_list():
+    files = [f for f in os.listdir(DOWNLOAD_DIR) if os.path.isfile(os.path.join(DOWNLOAD_DIR, f))]
     return {"files": files}
 
 @app.get("/downloadfile/")
