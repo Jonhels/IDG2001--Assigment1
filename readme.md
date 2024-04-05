@@ -27,7 +27,13 @@ Here is the backend if you want to test api endpoints https://quickest-hair-prod
 
 ## Usage
 
-To use the project you need to run the main.py file. This will start the server and you can access the endpoints through the browser or a tool like Postman. you also need to run backend that#s where the file uploads are sent and processed before you can download the file again. Pls be patient largere files take longer to process.
+To use the project you need to run the main.py file. This will start the server and you can access the endpoints through the browser or a tool like Postman. you also need to run backend that's where the file uploads are sent and processed before you can download the file again. Pls be patient largere files take longer to process.
+
+We used docker to run the backend server. There is a docker file that you can build on your local machine. To build the docker image, run the following command:
+
+```bash
+docker build -t your-project-name .
+```
 
 ## Testing
 
