@@ -6,23 +6,38 @@
         <title>File Upload and Compression</title>
     </head>
     <body>
-        <input type="file" id="fileInput" multiple />
-        <button onclick="uploadFiles()">Upload</button>
-        <!-- Download button triggers the download -->
+        <input type="file" id="fileInput" />
+        <button id="uploadButton" onclick="uploadFiles()">Upload</button>
         <button id="downloadButton" onclick="downloadFile()">Download</button>
+        <p>Uploaded file:</p>
         <ul id="fileList"></ul>
-        <!-- Placeholder for download messages -->
         <p id="downloadMessage"></p>
-        <!-- New list for downloaded files -->
-        <ul id="downloadedList"></ul>
+        <p>
+            It can take up to 5-10 minutes to get the file back after uploading. Please be patient.
+        </p>
+        <p>
+            The file will be shown here once it is ready for download.
+        </p>
+        <p style="color: red;">
+            Current file ready for download: <span id="downloadList" style="color: blue;">None</span></p>
+        </p>
 
         <script>
             async function uploadFiles() {
+              document.getElementById("downloadButton").disabled = true;
+                document.getElementById("uploadButton").disabled = true;
                 const input = document.getElementById("fileInput");
                 const data = new FormData();
 
+                // Clear the existing list to only show files from the current upload session
+                const list = document.getElementById("fileList");
+                list.innerHTML = "";
+
                 for (const file of input.files) {
                     data.append("files", file);
+                    const item = document.createElement("li");
+                    item.textContent = file.name;
+                    list.appendChild(item);
                 }
 
                 await fetch("/uploadfile/", {
@@ -30,7 +45,7 @@
                     body: data,
                 });
 
-                listFiles();
+                document.getElementById("uploadButton").disabled = false; // Re-enable the button after upload
             }
 
             async function listFiles() {
@@ -39,41 +54,15 @@
                 const list = document.getElementById("fileList");
                 list.innerHTML = "";
 
-                if (data.files.length === 0) {
+                data.files.forEach((file) => {
                     const item = document.createElement("li");
-                    item.textContent = "Files are processing";
+                    item.textContent = file;
                     list.appendChild(item);
-                } else {
-                    data.files.forEach((file) => {
-                        const item = document.createElement("li");
-                        item.textContent = file;
-                        list.appendChild(item);
-                    });
-                }
-            }
-            async function listDownloadFiles() {
-                const response = await fetch("/downloadList/");
-                const data = await response.json();
-                const list = document.getElementById("downloadedList");
-                list.innerHTML = "";
-
-                if (data.files.length === 0) {
-                    document.getElementById("downloadButton").disabled = true;
-                    document.getElementById("downloadMessage").innerText =
-                        "Server is processing the files, please wait...";
-                } else {
-                    document.getElementById("downloadButton").disabled = false;
-                    document.getElementById("downloadMessage").innerText = "";
-                    data.files.forEach((file) => {
-                        const item = document.createElement("li");
-                        item.textContent = file;
-                        list.appendChild(item);
-                    });
-                }
+                });
             }
 
             async function downloadFile() {
-                // Show download preparation message
+                document.getElementById("uploadButton").disabled = true;
                 document.getElementById("downloadMessage").innerText =
                     "Preparing your download, please wait...";
 
@@ -81,27 +70,52 @@
                 if (response.ok) {
                     const blob = await response.blob();
                     const url = URL.createObjectURL(blob);
+                    const filename = "download.tar.gz";
                     const a = document.createElement("a");
                     a.href = url;
-                    a.download = "download.zip"; // Specify filename
+                    a.download = filename;
                     document.body.appendChild(a);
                     a.click();
                     window.URL.revokeObjectURL(url);
-
-                    // Hide the preparation message
                     document.getElementById("downloadMessage").innerText = "";
-                    // Add the file to the downloaded list
-                    addToDownloadedList(a.download);
+
+                    // Call reset after successful download
+                    await resetFiles();
                 } else {
                     alert("Failed to download file.");
                     document.getElementById("downloadMessage").innerText = "";
                 }
+                document.getElementById("uploadButton").disabled = false;
             }
 
-            // Initial listing of files
-            listFiles();
-            setInterval(listDownloadFiles, 5000);
-            listDownloadFiles();
+            async function resetFiles() {
+                await fetch("/reset/"); // This assumes the reset endpoint does not need any specific request data
+                console.log("Server files have been reset.");
+            }
+
+            async function showAvailableFile() {
+                const response = await fetch("/downloadList/");
+                const data = await response.json();
+                const list = document.getElementById("downloadList");
+
+                if (data.files && data.files.length > 0) {
+                  document.getElementById("uploadButton").disabled = true;
+                    document.getElementById("downloadButton").disabled = false;
+                    list.innerHTML = data.files.join(", ");
+                } else {
+                    list.innerHTML = "None";
+                }
+            }
+
+            // Call showAvailableFile immediately to populate the list as soon as the page loads.
+            showAvailableFile();
+
+            // Then set it to update every 5 seconds
+            setInterval(showAvailableFile, 5000);
+
+
+            listFiles(); // Initial listing of files
+            setInterval(listFiles, 5000); // Update the file list every 5 seconds
         </script>
     </body>
 </html>

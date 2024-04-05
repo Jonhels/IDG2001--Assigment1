@@ -26,3 +26,6 @@ ENV FLASK_APP=script.py
 
 # Run Gunicorn when the container launches
 CMD ["sh", "-c", "gunicorn --bind 0.0.0.0:$PORT --timeout 120 script:app"]
+
+# If you want to run the app without using Gunicorn, you can use the following command
+#CMD ["gunicorn", "--bind", "0.0.0.0:5000", "--timeout", "120", "script:app"]
