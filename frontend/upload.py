@@ -13,10 +13,13 @@ file_path = os.path.join(folder_path, file_name)
 downloaded_file_path = os.path.join(download_path, 'downloaded_' + file_name)
 
 # URL endpoints
-#upload_url = 'https://pythonassignment1-production.up.railway.app/upload'
-#download_url = 'https://pythonassignment1-production.up.railway.app/download'
-upload_url = 'http://localhost:8089/upload'
-download_url = 'http://localhost:8089/download'
+upload_url = 'https://pythonassignment1-production.up.railway.app/upload'
+download_url = 'https://pythonassignment1-production.up.railway.app/download'
+
+# For local testing
+#upload_url = 'http://localhost:8089/upload'
+#download_url = 'http://localhost:8089/download'
+
 # Ensure directories exist
 os.makedirs(download_path, exist_ok=True)
 os.makedirs(uploaded_path, exist_ok=True)  # Ensure the upload directory exists
