@@ -1,0 +1,4 @@
+fastapi==0.75.0  # Use the latest version available at your time of deployment
+uvicorn==0.17.6  # Use the latest version available
+requests==2.27.1  # Use the latest version available
+python-multipart==0.0.5  # Use the latest version available

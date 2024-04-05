@@ -9,7 +9,7 @@
         <input type="file" id="fileInput" multiple />
         <button onclick="uploadFiles()">Upload</button>
         <!-- Download button triggers the download -->
-        <button onclick="downloadFile()">Download</button>
+        <button id="downloadButton" onclick="downloadFile()">Download</button>
         <ul id="fileList"></ul>
         <!-- Placeholder for download messages -->
         <p id="downloadMessage"></p>
@@ -57,11 +57,19 @@
                 const list = document.getElementById("downloadedList");
                 list.innerHTML = "";
 
-                data.files.forEach((file) => {
-                    const item = document.createElement("li");
-                    item.textContent = file;
-                    list.appendChild(item);
-                });
+                if (data.files.length === 0) {
+                    document.getElementById("downloadButton").disabled = true;
+                    document.getElementById("downloadMessage").innerText =
+                        "Server is processing the files, please wait...";
+                } else {
+                    document.getElementById("downloadButton").disabled = false;
+                    document.getElementById("downloadMessage").innerText = "";
+                    data.files.forEach((file) => {
+                        const item = document.createElement("li");
+                        item.textContent = file;
+                        list.appendChild(item);
+                    });
+                }
             }
 
             async function downloadFile() {
