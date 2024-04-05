@@ -8,7 +8,13 @@
     <body>
         <input type="file" id="fileInput" multiple />
         <button onclick="uploadFiles()">Upload</button>
+        <!-- Download button triggers the download -->
+        <button onclick="downloadFile()">Download</button>
         <ul id="fileList"></ul>
+        <!-- Placeholder for download messages -->
+        <p id="downloadMessage"></p>
+        <!-- New list for downloaded files -->
+        <ul id="downloadedList"></ul>
 
         <script>
             async function uploadFiles() {
@@ -38,6 +44,39 @@
                     item.textContent = file;
                     list.appendChild(item);
                 });
+            }
+
+            async function downloadFile() {
+                // Show download preparation message
+                document.getElementById("downloadMessage").innerText =
+                    "Preparing your download, please wait...";
+
+                const response = await fetch("/downloadfile/");
+                if (response.ok) {
+                    const blob = await response.blob();
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement("a");
+                    a.href = url;
+                    a.download = "download.zip"; // Specify filename
+                    document.body.appendChild(a);
+                    a.click();
+                    window.URL.revokeObjectURL(url);
+
+                    // Hide the preparation message
+                    document.getElementById("downloadMessage").innerText = "";
+                    // Add the file to the downloaded list
+                    addToDownloadedList(a.download);
+                } else {
+                    alert("Failed to download file.");
+                    document.getElementById("downloadMessage").innerText = "";
+                }
+            }
+
+            function addToDownloadedList(fileName) {
+                const list = document.getElementById("downloadedList");
+                const item = document.createElement("li");
+                item.textContent = fileName;
+                list.appendChild(item);
             }
 
             // Initial listing of files

@@ -1,4 +1,5 @@
 from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import JSONResponse
 from typing import List
@@ -6,7 +7,6 @@ import os
 import shutil
 import tarfile
 import subprocess
-
 
 app = FastAPI()
 
@@ -45,6 +45,18 @@ async def list_files():
     files = [f for f in os.listdir(UPLOAD_DIR) if os.path.isfile(os.path.join(UPLOAD_DIR, f))]
     return {"files": files}
 
+@app.get("/downloadfile/")
+async def download_latest_file():
+    """
+    Endpoint to download the latest file from the 'downloadedFiles' directory.
+    """
+    directory = "./downloadedFiles"
+    try:
+        # Find the latest file based on the last modification time
+        latest_file = max([os.path.join(directory, f) for f in os.listdir(directory)], key=os.path.getmtime)
+        return FileResponse(path=latest_file, filename=os.path.basename(latest_file), media_type='application/octet-stream')
+    except ValueError:
+        raise HTTPException(status_code=404, detail="No files found in the directory.")
 
 app.mount("/", StaticFiles(directory="static", html=True), name="static")
 

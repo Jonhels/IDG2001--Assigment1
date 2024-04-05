@@ -21,14 +21,13 @@ if os.path.exists(file_path):
         response = requests.post(upload_url, files=files)
         print("Upload response:", response.text)
 
-
+# Wait for 5 seconds for server to complete processing the file (failproofing)
+    time.sleep(5)
 
     # Download the file
     response = requests.get(download_url)
     if response.status_code == 200:
-        # Assuming the downloaded file should be saved with the same name
-        # pdf_file_path = os.path.join(download_path, 'downloaded_' + file_name)
-        with open('downloaded_' + file_name, 'wb') as f:
+        with open(downloaded_file_path, 'wb') as f:
             f.write(response.content)
         print("File downloaded successfully.")
     else:
