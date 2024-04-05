@@ -8,8 +8,8 @@ file_name = 'compressed_files.tar.gz'
 file_path = os.path.join(folder_path, file_name)
 download_path ="./downloadedFiles"
 # URL endpoints
-upload_url = 'https://pythonassignment1-production.up.railway.app/upload'
-download_url = 'https://pythonassignment1-production.up.railway.app/download'
+upload_url = 'https://quickest-hair-production.up.railway.app//upload'
+download_url = 'https://quickest-hair-production.up.railway.app//download'
 downloaded_file_path = os.path.join(download_path, 'downloaded_' + file_name)
 os.makedirs(download_path, exist_ok=True)
 
