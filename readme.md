@@ -13,7 +13,6 @@ download_url = 'http://localhost:8089/download'
 But only if you have specified port 8089 inside docker when running the frontend container. 
 If you have not specified the port, then you can use the default port 5000. I think its that one.
 
-
 ## Description
 
 This is a project for the course IDG2001 at NTNU Gjøvik. The project is a simple file upload and download service.
