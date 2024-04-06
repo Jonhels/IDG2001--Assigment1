@@ -5,11 +5,20 @@
 upload_url = 'https://pythonassignment1-production.up.railway.app/upload'
 download_url = 'https://pythonassignment1-production.up.railway.app/download'
 
-# URL endpoints frontend
+# For local testing
+
+upload_url = 'http://localhost:8089/upload'
+download_url = 'http://localhost:8089/download'
+
+But only if you have specified port 8089 inside docker when running the frontend container. 
+If you have not specified the port, then you can use the default port 5000. I think its that one.
+
 
 ## Description
 
-This is a project for the course IDG2001 at NTNU Gjøvik. The project is a simple file upload and download service. The project is split into two parts, the frontend and the backend. The frontend is a simple web page where you can upload a file and download a file. The backend is a server that handles the file uploads and downloads. The backend is built using Flask and the frontend is built using HTML, CSS and JavaScript.
+This is a project for the course IDG2001 at NTNU Gjøvik. The project is a simple file upload and download service.
+The project is split into two parts, the frontend and the backend. The frontend is a simple web page where you can upload a file and download a file. 
+The backend is a server that handles the file uploads and downloads. The backend is built using Flask and the frontend is built using HTML, CSS and JavaScript.
 
 ## Installation
 
@@ -21,9 +30,9 @@ cd IDG2001--ASSIGNMENT1
 pip install -r requirements.txt
 ```
 
-The server should be hosted on railway.app here is my railway link (unsure if there is enough money for it to stay there) https://oblig1-cloud-frontend-production.up.railway.app/
+The server should be hosted on railway.app here is my railway link https://pythonfrontend-production.up.railway.app/
 
-Here is the backend if you want to test api endpoints https://quickest-hair-production.up.railway.app/
+Here is the backend if you want to test api endpoints https://pythonassignment1-production.up.railway.app
 
 ## Usage
 
