@@ -4,9 +4,9 @@ import requests
 import shutil
 
 # Specify the folder paths
-folder_path = './compressedFiles'  # For compressed files
-download_path = "./downloadedFiles"  # For downloaded files
-uploaded_path = "./uploadedFiles"  # Assuming this is your upload directory
+folder_path = './compressedFiles'
+download_path = "./downloadedFiles"
+uploaded_path = "./uploadedFiles"
 
 file_name = 'compressed_files.tar.gz'
 file_path = os.path.join(folder_path, file_name)
@@ -22,7 +22,7 @@ download_url = 'https://pythonassignment1-production.up.railway.app/download'
 
 # Ensure directories exist
 os.makedirs(download_path, exist_ok=True)
-os.makedirs(uploaded_path, exist_ok=True)  # Ensure the upload directory exists
+os.makedirs(uploaded_path, exist_ok=True)
 
 # Check if the compressed file exists
 if os.path.exists(file_path):

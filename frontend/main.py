@@ -31,10 +31,6 @@ async def create_upload_files(files: List[UploadFile] = File(...)):
         # Ensure this checks for '.csv' files
         if file.filename and file.filename.endswith('.csv'):
             file_location = os.path.join(UPLOAD_DIR, file.filename)
-            # Check if the file is empty
-            contents = await file.read()
-            if not contents:
-                raise HTTPException(status_code=400, detail="Empty file")
 
             with open(file_location, "wb") as buffer:
                 shutil.copyfileobj(file.file, buffer)

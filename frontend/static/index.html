@@ -23,6 +23,7 @@
         </p>
 
         <script>
+            // Upload the files to the server
             async function uploadFiles() {
               document.getElementById("downloadButton").disabled = true;
                 document.getElementById("uploadButton").disabled = true;
@@ -45,9 +46,10 @@
                     body: data,
                 });
 
-                document.getElementById("uploadButton").disabled = false; // Re-enable the button after upload
+                document.getElementById("uploadButton").disabled = false;
             }
 
+            // List the files on the server
             async function listFiles() {
                 const response = await fetch("/files/");
                 const data = await response.json();
@@ -61,6 +63,7 @@
                 });
             }
 
+            // Download the file from the server
             async function downloadFile() {
                 document.getElementById("uploadButton").disabled = true;
                 document.getElementById("downloadMessage").innerText =
@@ -88,11 +91,12 @@
                 document.getElementById("uploadButton").disabled = false;
             }
 
+            // Reset the files on the server
             async function resetFiles() {
-                await fetch("/reset/"); // This assumes the reset endpoint does not need any specific request data
-                console.log("Server files have been reset.");
+                await fetch("/reset/");
             }
 
+            // Show the available file for download
             async function showAvailableFile() {
                 const response = await fetch("/downloadList/");
                 const data = await response.json();

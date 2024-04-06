@@ -18,7 +18,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 os.makedirs(MD_FOLDER, exist_ok=True)
 os.makedirs(PDF_FOLDER, exist_ok=True)
 
-# Path for the Markdown template, assumed to be in the root directory
+# Path for the Markdown template
 MD_TEMPLATE_PATH = 'template.md'
 
 def delayed_cleanup():
